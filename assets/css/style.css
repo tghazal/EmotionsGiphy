@@ -1,0 +1,17 @@
+body {
+
+    background-image: url('../images/background.jpg' );
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-size: 100% 100%;
+    background-position: center; 
+    height: 100%;
+   
+}
+.title{
+   font-family: fantasy;
+	font-size: 40px;
+	font-weight: bold;
+	text-align: center;
+	
+}
