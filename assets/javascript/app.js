@@ -1,6 +1,7 @@
 
 
-var emotionList = ["happy", "sad", "ungry", "excited", "mad"];
+var emotionList = ["Happy", "Ungry", "Excited", "Mad", "Fear", "Anger", "Sadness", "Joy", "Disgust", "Surprise", "Trust", "Anticipation"];
+var name;
 
 
 
@@ -13,6 +14,7 @@ addButtons = function () {
         emotionBtn.text(emotionList[i]);
         emotionBtn.addClass("btn btn-warning ml-1 mb-1 mt-1 emotion-btn");
         emotionBtn.attr("data-name", emotionList[i]);
+        emotionBtn.attr("data-type", "originalAdd");
         // Added the button to the buttons-view div
         $("#buttons").append(emotionBtn);
 
@@ -20,8 +22,20 @@ addButtons = function () {
 }
 
 displayEmotionImages = function () {
-    $("#img-view").empty();
-    var name = $(this).attr("data-name");
+  
+    var type = $(this).attr("data-type");
+    var myDiv=$("<div>");
+    if (type === "originalAdd") {
+        $("#img-view").empty();
+        name = $(this).attr("data-name");
+    }
+    if(type==="add")
+    {
+     $("#col2").remove();
+  
+    }
+
+
     var apikey = "5nuO5530mf7ZP8hu1PuNJP83FGzJTqyV";
     var url = "https://api.giphy.com/v1/gifs/search?q=" + name + "&api_key=" + apikey + "&limit=10";
     axios.get(url)
@@ -40,15 +54,18 @@ displayEmotionImages = function () {
                 emotionImg.css("width", "180px");
                 emotionImg.css("height", "180px");
                 emotionImg.addClass("emotion-img");
-                var ratingP=$("<p>").text("Rating is:"+rating);
-                var col = $("<div class='col-md-3 col-sm-6 mt-2 '>").append([emotionImg,ratingP]);
+                var ratingP = $("<p>").text("Rating is:" + rating);
+                var titleP = $("<p>").text("Title :" + response.data.data[i].title);
+              var ahref=$("<a href="+imgSrc+">Download</a>");
+              ahref.attr("download","output.png");
+                var col = $("<div class='col-md-3 col-sm-6 mt-2 '>").append([emotionImg, ratingP,titleP,ahref]);
                 $("#img-view").append(col);
-                console.log(response.data.data[i].images.fixed_height_small.url);
-
-
-                console.log(response.data.data[i].images.fixed_height_small_still.url);
-                console.log(response.data.data[i].rating);
+                console.log(response.data.data[i]);
             }
+            var addBtn = $("<button id='addBtn' class='btn btn-warning ml-1 mb-1 mt-1 emotion-btn'>").text("Add More ..");
+            addBtn.attr("data-type", "add");
+            var col2 = $("<div id='col2' class='col-md-3 col-sm-6 mt-2 '>").append(addBtn);
+            $("#img-view").append(col2);
         })
     //    .error(function(error){
     //   console.error(error);
