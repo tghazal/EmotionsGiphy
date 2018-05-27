@@ -20,32 +20,42 @@ addButtons = function () {
 
     }
 }
-
-displayEmotionImages = function () {
   
+displayEmotionImages = function () {
+      var initial=0;
+      var end=10;
     var type = $(this).attr("data-type");
     var myDiv=$("<div>");
     if (type === "originalAdd") {
         $("#img-view").empty();
         name = $(this).attr("data-name");
+        initial=0;
+        end=10;
+       
     }
     if(type==="add")
     {
      $("#col2").remove();
-  
+     initial=initial+10;
+     end=end+10;
+     console.log(initial);
+     console.log(end);
     }
 
 
     var apikey = "5nuO5530mf7ZP8hu1PuNJP83FGzJTqyV";
-    var url = "https://api.giphy.com/v1/gifs/search?q=" + name + "&api_key=" + apikey + "&limit=10";
+    var url = "https://api.giphy.com/v1/gifs/search?q=" + name + "&api_key=" + apikey ;
     axios.get(url)
         .then(function (response) {
             var results = response.data;
-            for (var i = 0; i < 10; i++) {
-                var imgAnimate = response.data.data[i].images.fixed_height_small.url;
-                var imgSrc = response.data.data[i].images.fixed_height_small_still.url;
-                var imgStill = response.data.data[i].images.fixed_height_small_still.url;
-                var rating = response.data.data[i].rating;
+
+            for (  initial; initial < end; initial++) {
+                console.log(initial);
+                var imgAnimate = response.data.data[initial].images.fixed_height_small.url;
+                console.log(imgAnimate);
+                var imgSrc = response.data.data[initial].images.fixed_height_small_still.url;
+                var imgStill = response.data.data[initial].images.fixed_height_small_still.url;
+                var rating = response.data.data[initial].rating;
                 var emotionImg = $("<img>");
                 emotionImg.attr("src", imgSrc);
                 emotionImg.attr("data-still", imgStill);
@@ -55,22 +65,25 @@ displayEmotionImages = function () {
                 emotionImg.css("height", "180px");
                 emotionImg.addClass("emotion-img");
                 var ratingP = $("<p>").text("Rating is:" + rating);
-                var titleP = $("<p>").text("Title :" + response.data.data[i].title);
-              var ahref=$("<a href="+imgSrc+">Download</a>");
-              ahref.attr("download","output.png");
+                var titleP = $("<p>").text("Title :" + response.data.data[initial].title);
+                var ahref=$("<a href="+imgSrc+" >Download </a>");
+                ahref.attr("download");
+                var movetoF=$("<a href='#'>Move to favourite section</a>");
+                movetoF.addClass("moveToFavourite");
                 var col = $("<div class='col-md-3 col-sm-6 mt-2 '>").append([emotionImg, ratingP,titleP,ahref]);
                 $("#img-view").append(col);
-                console.log(response.data.data[i]);
+                console.log(response.data.data[initial]);
             }
             var addBtn = $("<button id='addBtn' class='btn btn-warning ml-1 mb-1 mt-1 emotion-btn'>").text("Add More ..");
             addBtn.attr("data-type", "add");
             var col2 = $("<div id='col2' class='col-md-3 col-sm-6 mt-2 '>").append(addBtn);
             $("#img-view").append(col2);
         })
-    //    .error(function(error){
-    //   console.error(error);
-
-    //    })
+        .catch(function(err){
+            console.error(err)
+        }
+    )
+    
 
 }
 ChangeImgState = function () {
