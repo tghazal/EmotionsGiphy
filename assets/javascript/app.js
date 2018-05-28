@@ -21,11 +21,18 @@ addButtons = function () {
     }
 }
   
+//function to display images to html , 10 images each time 
 displayEmotionImages = function () {
-      var initial=0;
-      var end=10;
+   // declare variables initial and end for the begging and end of result array 
+    var initial=0;
+    var end=10; 
+    //declair url using APIkey
+    var apikey = "5nuO5530mf7ZP8hu1PuNJP83FGzJTqyV";
+    var url = "https://api.giphy.com/v1/gifs/search?q=" + name + "&api_key=" + apikey ;
+    //get the type of button clicked if the original buttons above or the add more button 
     var type = $(this).attr("data-type");
     var myDiv=$("<div>");
+    //if the original buttons clicked then get the name of the nutton and intilize initial to  and end to 10 
     if (type === "originalAdd") {
         $("#img-view").empty();
         name = $(this).attr("data-name");
@@ -33,23 +40,24 @@ displayEmotionImages = function () {
         end=10;
        
     }
+    // els eif the buttonclickes is add more then add 10 to inital and end 
     if(type==="add")
     {
      $("#col2").remove();
      initial=initial+10;
      end=end+10;
-     console.log(initial);
-     console.log(end);
+     
     }
 
 
-    var apikey = "5nuO5530mf7ZP8hu1PuNJP83FGzJTqyV";
-    var url = "https://api.giphy.com/v1/gifs/search?q=" + name + "&api_key=" + apikey ;
+  //giving url to axios object 
     axios.get(url)
         .then(function (response) {
+            //put the response in result array 
             var results = response.data;
-
+             // for 10 times add an image to the htmk div with title and rating and download link 
             for (  initial; initial < end; initial++) {
+                
                 console.log(initial);
                 var imgAnimate = response.data.data[initial].images.fixed_height_small.url;
                 console.log(imgAnimate);
@@ -86,6 +94,7 @@ displayEmotionImages = function () {
     
 
 }
+// change image state whenever clicked on images
 ChangeImgState = function () {
 
     var state = $(this).attr("data-state");
@@ -103,6 +112,7 @@ ChangeImgState = function () {
     }
 }
 
+//when addBtn button clicked get the name and oush it to the array 
 $("#addBtn").on("click", function () {
     event.preventDefault();
     // grab the input from the textbox
@@ -122,5 +132,5 @@ $(document).on("click", ".emotion-btn", displayEmotionImages);
 // Adding click event listeners to he elements with a class of "emotion-img"
 $(document).on("click", ".emotion-img", ChangeImgState);
 
-
+// call addButtons to add buttons at the top in html
 addButtons();
